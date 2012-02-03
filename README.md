@@ -55,3 +55,25 @@ The best way to use this gem is to add the folling rake task to your project in 
       end
     end
 
+Capistrano
+----------
+
+If you want to sync your assets when you deploy using Capistrano, add the following to your deploy file
+
+    namespace :deploy do
+      namespace :assets do
+        task :sync, :roles => :web, :except => { :no_release => true } do
+          run "cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:sync"
+        end
+      end
+    end
+
+    after "deploy:assets:precompile", "deploy:assets:sync"
+
+Rails Configuration
+-------------------
+
+Finally, after you have run sync for the first time, don't forget to update your rails environment to point to your rackspace container. In `config/environments/production.rb` change the following to the url for your container.
+
+    config.action_controller.asset_host = "http://xxxx.xxx.xxx.rackcdn.com"
+
