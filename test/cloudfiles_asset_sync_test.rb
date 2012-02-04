@@ -4,7 +4,7 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
 
   def setup
     mock_class = stub
-    mock_class.stubs(:parent_name).returns('TestApplication')
+    mock_class.stubs(:parent_name).returns('ExampleApplication')
 
     mock_application = stub
     mock_application.stubs(:class).returns(mock_class)
@@ -28,8 +28,8 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
 
     mock_cloud_files = mock
     mock_cloud_files.expects(:containers).returns([])
-    mock_cloud_files.expects(:create_container).with("test_application")
-    mock_cloud_files.expects(:container).with("test_application").returns(mock_container)
+    mock_cloud_files.expects(:create_container).with("test_example_application")
+    mock_cloud_files.expects(:container).with("test_example_application").returns(mock_container)
 
     expect_arguments = {:username => 'myusername', :api_key => 'myapikey'}
     CloudFiles::Connection.expects(:new).with{|arguments| assert_equal expect_arguments, arguments}.returns(mock_cloud_files)
@@ -49,8 +49,8 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
 
     mock_cloud_files = mock
     mock_cloud_files.expects(:containers).returns([])
-    mock_cloud_files.expects(:create_container).with("test_application")
-    mock_cloud_files.expects(:container).with("test_application").returns(mock_container)
+    mock_cloud_files.expects(:create_container).with("test_example_application")
+    mock_cloud_files.expects(:container).with("test_example_application").returns(mock_container)
 
     expect_arguments = {:username => 'myusername', :api_key => 'myapikey'}
     CloudFiles::Connection.expects(:new).with{|arguments| assert_equal expect_arguments, arguments}.returns(mock_cloud_files)
@@ -67,8 +67,8 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
 
     mock_cloud_files = mock
     mock_cloud_files.expects(:containers).returns([])
-    mock_cloud_files.expects(:create_container).with("test_application")
-    mock_cloud_files.expects(:container).with("test_application").returns(mock_container)
+    mock_cloud_files.expects(:create_container).with("test_example_application")
+    mock_cloud_files.expects(:container).with("test_example_application").returns(mock_container)
 
     expect_arguments = {:username => 'myusername', :api_key => 'myapikey', :auth_url => CloudFiles::AUTH_UK}
     CloudFiles::Connection.expects(:new).with{|arguments| assert_equal expect_arguments, arguments}.returns(mock_cloud_files)
@@ -102,8 +102,8 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
     mock_container.expects(:make_public)
 
     mock_cloud_files = mock
-    mock_cloud_files.expects(:containers).returns(['test_application'])
-    mock_cloud_files.expects(:container).with("test_application").returns(mock_container)
+    mock_cloud_files.expects(:containers).returns(['test_example_application'])
+    mock_cloud_files.expects(:container).with("test_example_application").returns(mock_container)
 
     expect_arguments = {:username => 'myusername', :api_key => 'myapikey'}
     CloudFiles::Connection.expects(:new).with{|arguments| assert_equal expect_arguments, arguments}.returns(mock_cloud_files)

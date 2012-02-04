@@ -19,7 +19,7 @@ module CloudfilesAssetSync
 
       cloud_files = CloudFiles::Connection.new(options)
 
-      container_name = config["container"] || Rails.application.class.parent_name.underscore
+      container_name = config["container"] || "#{Rails.env}_#{Rails.application.class.parent_name.underscore}"
       cloud_files.create_container(container_name) unless cloud_files.containers.include? container_name
       container = cloud_files.container(container_name)
       container.make_public
