@@ -35,6 +35,7 @@ In your rails project create a file named `config/cloudfiles.yml` with the follo
       api_key: "rackspace api key" # Required
       container: "container name" # Optional, default is to use your railsenv_applicationname, e.g. production_example_application
       region: "uk" # Optional, only add if you want to use the uk rackspace cloud files
+      ttl: 2000 # Optional, set the ttl used for a container
 
 Usage
 -----

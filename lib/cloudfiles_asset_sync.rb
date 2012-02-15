@@ -22,7 +22,11 @@ module CloudfilesAssetSync
       container_name = config["container"] || "#{Rails.env}_#{Rails.application.class.parent_name.underscore}"
       cloud_files.create_container(container_name) unless cloud_files.containers.include? container_name
       container = cloud_files.container(container_name)
-      container.make_public
+
+      container_options = {:ttl => 604800}
+      container_options[:ttl] = Integer(config["ttl"]) if config["ttl"]
+
+      container.make_public(container_options)
 
       return container
     end

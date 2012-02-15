@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'cloudfiles_asset_sync'
-  s.version = '1.1.0'
+  s.version = '1.1.1'
   s.author = 'Owen Davies'
   s.homepage = 'https://github.com/obduk/cloudfiles_asset_sync'
   s.summary = 'Rake task for uploading rails assets to rackspace cloud files'

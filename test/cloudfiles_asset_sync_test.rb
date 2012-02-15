@@ -22,7 +22,7 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
     mock_object.expects(:content_type=).with('image/png')
 
     mock_container = mock
-    mock_container.expects(:make_public)
+    mock_container.expects(:make_public).with(:ttl => 604800)
     mock_container.expects(:objects).returns([])
     mock_container.expects(:create_object).with('assets/image.png').returns(mock_object)
 
@@ -45,7 +45,7 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
     YAML.expects(:load_file).with(File.join(Rails.root, 'config', 'cloudfiles.yml')).returns(config)
 
     mock_container = mock
-    mock_container.expects(:make_public)
+    mock_container.expects(:make_public).with(:ttl => 604800)
 
     mock_cloud_files = mock
     mock_cloud_files.expects(:containers).returns([])
@@ -63,7 +63,7 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
     YAML.expects(:load_file).with(File.join(Rails.root, 'config', 'cloudfiles.yml')).returns(config)
 
     mock_container = mock
-    mock_container.expects(:make_public)
+    mock_container.expects(:make_public).with(:ttl => 604800)
 
     mock_cloud_files = mock
     mock_cloud_files.expects(:containers).returns([])
@@ -81,7 +81,7 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
     YAML.expects(:load_file).with(File.join(Rails.root, 'config', 'cloudfiles.yml')).returns(config)
 
     mock_container = mock
-    mock_container.expects(:make_public)
+    mock_container.expects(:make_public).with(:ttl => 604800)
 
     mock_cloud_files = mock
     mock_cloud_files.expects(:containers).returns([])
@@ -94,12 +94,30 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
     assert_equal mock_container, CloudfilesAssetSync.setup_container
   end
 
+  def test_setup_container_excepts_optional_ttl
+    config = {"test" => {"username" => "myusername", "api_key" => "myapikey", "ttl" => "31557600"}}
+    YAML.expects(:load_file).with(File.join(Rails.root, 'config', 'cloudfiles.yml')).returns(config)
+
+    mock_container = mock
+    mock_container.expects(:make_public).with(:ttl => 31557600)
+
+    mock_cloud_files = mock
+    mock_cloud_files.expects(:containers).returns([])
+    mock_cloud_files.expects(:create_container).with("test_example_application")
+    mock_cloud_files.expects(:container).with("test_example_application").returns(mock_container)
+
+    expect_arguments = {:username => 'myusername', :api_key => 'myapikey'}
+    CloudFiles::Connection.expects(:new).with{|arguments| assert_equal expect_arguments, arguments}.returns(mock_cloud_files)
+
+    assert_equal mock_container, CloudfilesAssetSync.setup_container
+  end
+
   def test_setup_container_with_existing_container
     config = {"test" => {"username" => "myusername", "api_key" => "myapikey"}}
     YAML.expects(:load_file).with(File.join(Rails.root, 'config', 'cloudfiles.yml')).returns(config)
 
     mock_container = mock
-    mock_container.expects(:make_public)
+    mock_container.expects(:make_public).with(:ttl => 604800)
 
     mock_cloud_files = mock
     mock_cloud_files.expects(:containers).returns(['test_example_application'])
