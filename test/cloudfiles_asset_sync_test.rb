@@ -28,8 +28,7 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
 
     mock_cloud_files = mock
     mock_cloud_files.expects(:containers).returns([])
-    mock_cloud_files.expects(:create_container).with("test_example_application")
-    mock_cloud_files.expects(:container).with("test_example_application").returns(mock_container)
+    mock_cloud_files.expects(:create_container).with("test_example_application").returns(mock_container)
 
     expect_arguments = {:username => 'myusername', :api_key => 'myapikey'}
     CloudFiles::Connection.expects(:new).with{|arguments| assert_equal expect_arguments, arguments}.returns(mock_cloud_files)
@@ -49,8 +48,7 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
 
     mock_cloud_files = mock
     mock_cloud_files.expects(:containers).returns([])
-    mock_cloud_files.expects(:create_container).with("test_example_application")
-    mock_cloud_files.expects(:container).with("test_example_application").returns(mock_container)
+    mock_cloud_files.expects(:create_container).with("test_example_application").returns(mock_container)
 
     expect_arguments = {:username => 'myusername', :api_key => 'myapikey'}
     CloudFiles::Connection.expects(:new).with{|arguments| assert_equal expect_arguments, arguments}.returns(mock_cloud_files)
@@ -67,8 +65,7 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
 
     mock_cloud_files = mock
     mock_cloud_files.expects(:containers).returns([])
-    mock_cloud_files.expects(:create_container).with("test_example_application")
-    mock_cloud_files.expects(:container).with("test_example_application").returns(mock_container)
+    mock_cloud_files.expects(:create_container).with("test_example_application").returns(mock_container)
 
     expect_arguments = {:username => 'myusername', :api_key => 'myapikey', :auth_url => CloudFiles::AUTH_UK}
     CloudFiles::Connection.expects(:new).with{|arguments| assert_equal expect_arguments, arguments}.returns(mock_cloud_files)
@@ -85,8 +82,7 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
 
     mock_cloud_files = mock
     mock_cloud_files.expects(:containers).returns([])
-    mock_cloud_files.expects(:create_container).with("examplecontainer")
-    mock_cloud_files.expects(:container).with("examplecontainer").returns(mock_container)
+    mock_cloud_files.expects(:create_container).with("examplecontainer").returns(mock_container)
 
     expect_arguments = {:username => 'myusername', :api_key => 'myapikey'}
     CloudFiles::Connection.expects(:new).with{|arguments| assert_equal expect_arguments, arguments}.returns(mock_cloud_files)
@@ -103,13 +99,29 @@ class CloudfilesAssetSyncTest < Test::Unit::TestCase
 
     mock_cloud_files = mock
     mock_cloud_files.expects(:containers).returns([])
-    mock_cloud_files.expects(:create_container).with("test_example_application")
-    mock_cloud_files.expects(:container).with("test_example_application").returns(mock_container)
+    mock_cloud_files.expects(:create_container).with("test_example_application").returns(mock_container)
 
     expect_arguments = {:username => 'myusername', :api_key => 'myapikey'}
     CloudFiles::Connection.expects(:new).with{|arguments| assert_equal expect_arguments, arguments}.returns(mock_cloud_files)
 
     assert_equal mock_container, CloudfilesAssetSync.setup_container
+  end
+
+  def test_setup_container_has_option_container_name_parameter
+    config = {"test" => {"username" => "myusername", "api_key" => "myapikey", "container" => "examplecontainer"}}
+    YAML.expects(:load_file).with(File.join(Rails.root, 'config', 'cloudfiles.yml')).returns(config)
+
+    mock_container = mock
+    mock_container.expects(:make_public).with(:ttl => 604800)
+
+    mock_cloud_files = mock
+    mock_cloud_files.expects(:containers).returns([])
+    mock_cloud_files.expects(:create_container).with("custom_name").returns(mock_container)
+
+    expect_arguments = {:username => 'myusername', :api_key => 'myapikey'}
+    CloudFiles::Connection.expects(:new).with{|arguments| assert_equal expect_arguments, arguments}.returns(mock_cloud_files)
+
+    assert_equal mock_container, CloudfilesAssetSync.setup_container("custom_name")
   end
 
   def test_setup_container_with_existing_container

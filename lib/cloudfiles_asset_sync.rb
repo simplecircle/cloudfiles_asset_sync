@@ -11,7 +11,7 @@ module CloudfilesAssetSync
       asset_files.each{|filename| upload_file(container, existing_objects, filename)}
     end
 
-    def setup_container
+    def setup_container(container_name = nil)
       config = YAML.load_file(File.join(Rails.root, 'config', 'cloudfiles.yml'))[Rails.env]
 
       options = {:username => config["username"], :api_key => config["api_key"]}
@@ -19,9 +19,9 @@ module CloudfilesAssetSync
 
       cloud_files = CloudFiles::Connection.new(options)
 
-      container_name = config["container"] || "#{Rails.env}_#{Rails.application.class.parent_name.underscore}"
-      cloud_files.create_container(container_name) unless cloud_files.containers.include? container_name
-      container = cloud_files.container(container_name)
+      container_name ||= config["container"] || "#{Rails.env}_#{Rails.application.class.parent_name.underscore}"
+      container = cloud_files.create_container(container_name) unless cloud_files.containers.include? container_name
+      container ||= cloud_files.container(container_name)
 
       container_options = {:ttl => 604800}
       container_options[:ttl] = Integer(config["ttl"]) if config["ttl"]
