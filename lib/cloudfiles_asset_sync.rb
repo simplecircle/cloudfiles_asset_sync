@@ -36,6 +36,7 @@ module CloudfilesAssetSync
     end
 
     def upload_file(container, existing_objects, filename)
+      p "Uploading #{filename}"
       object_name = filename.sub(File.join(Rails.root, 'public', ''), '')
       object = container.create_object(object_name)
 
