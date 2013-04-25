@@ -32,7 +32,9 @@ module CloudfilesAssetSync
     end
 
     def asset_files
-      Dir[File.join(Rails.root, 'public', 'assets')].reject{|file| File.directory?(file)}
+      public = Dir[File.join(Rails.root, 'public', '**')].reject{|file| File.directory?(file)}
+      assets = Dir[File.join(Rails.root, 'public', 'assets','**')].reject{|file| File.directory?(file)}
+      return public + assets
     end
 
     def upload_file(container, existing_objects, filename)
